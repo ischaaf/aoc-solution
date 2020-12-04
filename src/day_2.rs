@@ -34,7 +34,7 @@ impl<'a> From<Captures<'a>> for PWPolicy {
 
  fn get_input() -> Box<dyn Iterator<Item=PWPolicy>> {
     let re = Regex::new(r"([0-9]+)\-([0-9]+) (.): (.+)").unwrap();
-    Box::new(utils::read_lines("data/day_2/input_big.txt")
+    Box::new(utils::read_lines("data/day_2/input.txt")
         .map(move |l| {
             let cap = re
                 .captures_iter(l.as_str())

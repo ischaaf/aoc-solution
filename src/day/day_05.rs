@@ -8,7 +8,7 @@ impl Day for DaySln {
     }
 
     fn solve(&self) -> Solution {
-        let mut seats: Vec<i32> = self.daily_input()
+        let seats: Vec<_> = self.daily_input()
             .lines()
             .map(|l| {
                 l.chars()
@@ -22,15 +22,13 @@ impl Day for DaySln {
             .map(|l| i32::from_str_radix(l.as_str(), 2).unwrap())
             .collect();
 
-        seats.sort_unstable();
-        let part_1 = *seats.last().unwrap();
+        let max = *seats.iter().max().unwrap();
+        let min = *seats.iter().min().unwrap();
+        let act_sum: i32 = seats.iter().sum();
+        let exp_sum: i32 = (min..max+1).sum();
+        let diff = exp_sum - act_sum;
 
-        let part_2 = seats
-            .windows(2)
-            .filter(|p| p[0] + 2 == p[1])
-            .next()
-            .unwrap()[0];
 
-        (Some(part_1), Some(part_2))
+        (Some(max), Some(diff))
     }
 }

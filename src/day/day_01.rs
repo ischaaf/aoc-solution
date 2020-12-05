@@ -1,4 +1,4 @@
-use crate::day::Day;
+use crate::day::{Day,Solution};
 use std::collections::HashSet;
 
 pub struct DaySln {}
@@ -8,43 +8,43 @@ impl Day for DaySln {
         1
     }
 
-    fn solve_part_1(&self) {
-        let lines = self.get_input_ints();
-        let mut seen: HashSet<i32> = HashSet::new();
-        for num in lines {
-            let comp = 2020 - num;
-            if seen.contains(&comp) {
-                println!("Found {}", num * comp);
-                return;
-            }
-            seen.insert(num);
-        }
-        println!("Did not find match");
+    fn solve(&self) -> Solution {
+        let lines = self.daily_input()
+            .lines()
+            .map(|e| e.parse::<i32>().unwrap())
+            .collect();
+
+        (Some(self.part_1(&lines)), Some(self.part_2(&lines)))
     }
 
-    fn solve_part_2(&self) {
-        let lines = self.get_input_ints();
+}
+
+impl DaySln {
+    fn part_1(&self, lines: &Vec<i32>) -> i32 {
         let mut seen: HashSet<i32> = HashSet::new();
-        for num_1 in &lines {
-            for num_2 in &lines {
+        for num in lines {
+            let comp = 2020i32.checked_sub(*num);
+            if comp.is_some() && seen.contains(&comp.unwrap()) {
+                return num * comp.unwrap();
+            }
+            seen.insert(*num);
+        }
+        panic!("Did not find match");
+    }
+
+    fn part_2(&self, lines: &Vec<i32>) -> i32 {
+        let mut seen: HashSet<i32> = HashSet::new();
+        for num_1 in lines {
+            for num_2 in lines {
                 let comp = 2020 - num_1 - num_2;
                 if seen.contains(&comp) {
-                    println!("Found {}", num_1 * num_2 * comp);
-                    return;
+                    return num_1 * num_2 * comp;
                 }
                 seen.insert(*num_1);
                 seen.insert(*num_2);
             }
         }
-        println!("Did not find match");
-    }
-}
 
-impl DaySln {
-    fn get_input_ints(&self) -> Vec<i32> {
-        self.daily_input()
-            .lines()
-            .map(|e| e.parse::<i32>().unwrap())
-            .collect()
+        panic!("Did not find match");
     }
 }

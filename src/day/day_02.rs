@@ -1,4 +1,4 @@
-use crate::day::Day;
+use crate::day::{Day,Solution};
 use regex::{Captures, Regex};
 
 #[derive(Debug)]
@@ -27,26 +27,22 @@ impl Day for DaySln {
         2
     }
 
-    fn solve_part_1(&self) {
-        let count = self.valid_count(|pwp| {
+    fn solve(&self) -> Solution {
+        let part_1 = self.valid_count(|pwp| {
             let count = pwp.pw.chars().filter(|c| *c == pwp.letter).count();
             count >= pwp.min && count <= pwp.max
         });
-        println!("Found: {} valid", count);
-    }
-
-    fn solve_part_2(&self) {
-        let count = self.valid_count(|pwp| {
+        let part_2 = self.valid_count(|pwp| {
             let min_char = pwp.pw.chars().nth(pwp.min - 1);
             let max_char = pwp.pw.chars().nth(pwp.max - 1);
             (min_char == Some(pwp.letter)) ^ (max_char == Some(pwp.letter))
         });
-        println!("Found: {} valid", count);
+        (Some(part_1), Some(part_2))
     }
 }
 
 impl DaySln {
-    fn valid_count(&self, validate_fn: fn(PWPolicy) -> bool) -> usize {
+    fn valid_count(&self, validate_fn: fn(PWPolicy) -> bool) -> i32 {
         let re = Regex::new(r"([0-9]+)\-([0-9]+) (.): (.+)").unwrap();
         self.daily_input()
             .lines()
@@ -59,6 +55,6 @@ impl DaySln {
             })
             .map(|pwp| validate_fn(pwp))
             .filter(|v| *v)
-            .count()
+            .count() as i32
     }
 }

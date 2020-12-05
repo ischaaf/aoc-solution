@@ -1,4 +1,4 @@
-use crate::day::Day;
+use crate::day::{Day,Solution};
 use regex::Regex;
 use std::collections::HashMap;
 
@@ -11,8 +11,8 @@ lazy_static! {
     static ref HGT_RE: Regex = Regex::new(r"^([0-9]+)(cm|in)$").unwrap();
 }
 
-fn digit_match(val: &String, min: u32, max: u32) -> bool {
-    match val.parse::<u32>() {
+fn digit_match(val: &String, min: i32, max: i32) -> bool {
+    match val.parse::<i32>() {
         Ok(num) => num >= min && num <= max,
         Err(_) => false,
     }
@@ -57,29 +57,27 @@ impl Day for DaySln {
     fn day(&self) -> u32 {
         4
     }
-    fn solve_part_1(&self) {
-        let result = self.run_check(|pport| {
+
+    fn solve(&self) -> Solution {
+        let part_1 = self.run_check(|pport| {
             REQUIRED
                 .iter()
                 .map(|key| pport.contains_key(&key.to_string()))
                 .all(|v| v)
         });
-        println!("Found {} valid passports", result);
-    }
 
-    fn solve_part_2(&self) {
-        let result: usize = self.run_check(|pport| {
+        let part_2: i32 = self.run_check(|pport| {
             REQUIRED
                 .iter()
                 .map(|key| is_valid(key, pport.get(&key.to_string())))
                 .all(|v| v)
         });
-        println!("Found {} valid passports", result);
+        (Some(part_1), Some(part_2))
     }
 }
 
 impl DaySln {
-    fn run_check<F: FnMut(&HashMap<String, String>) -> bool>(&self, validate: F) -> usize {
+    fn run_check<F: FnMut(&HashMap<String, String>) -> bool>(&self, validate: F) -> i32 {
         self.daily_input()
             .lines()
             .map(|l| {
@@ -108,6 +106,6 @@ impl DaySln {
             .iter()
             .map(validate)
             .filter(|v| *v)
-            .count()
+            .count() as i32
     }
 }

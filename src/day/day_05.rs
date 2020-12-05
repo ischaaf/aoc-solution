@@ -49,14 +49,7 @@ impl DaySln {
                     })
                     .collect::<String>()
             })
-            .map(|l| {
-                let (r, c) = l.split_at(7);
-                let row = u32::from_str_radix(r, 2).unwrap();
-                let col = u32::from_str_radix(c, 2).unwrap();
-                // println!("Row: {}, Col: {}", row, col);
-                // println!("Prod: {}", row * 8 + col);
-                row * 8 + col
-            })
+            .map(|l| u32::from_str_radix(l.as_str(), 2).unwrap())
             .collect()
     }
 }

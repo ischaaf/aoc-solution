@@ -38,24 +38,25 @@ impl DaySln {
     }
 
     fn seats(&self) -> Vec<u32> {
-        self.daily_input().lines()
+        self.daily_input()
+            .lines()
             .map(|l| {
-            l.chars()
-                .map(|c| match c {
-                    'B' | 'R' => '1',
-                    'F' | 'L' => '0',
-                    _ => panic!(),
-                })
-                .collect::<String>()
-        })
-        .map(|l| {
-            let (r, c) = l.split_at(7);
-            let row = u32::from_str_radix(r, 2).unwrap();
-            let col = u32::from_str_radix(c, 2).unwrap();
-            // println!("Row: {}, Col: {}", row, col);
-            // println!("Prod: {}", row * 8 + col);
-            row * 8 + col
-        })
-        .collect()
+                l.chars()
+                    .map(|c| match c {
+                        'B' | 'R' => '1',
+                        'F' | 'L' => '0',
+                        _ => panic!(),
+                    })
+                    .collect::<String>()
+            })
+            .map(|l| {
+                let (r, c) = l.split_at(7);
+                let row = u32::from_str_radix(r, 2).unwrap();
+                let col = u32::from_str_radix(c, 2).unwrap();
+                // println!("Row: {}, Col: {}", row, col);
+                // println!("Prod: {}", row * 8 + col);
+                row * 8 + col
+            })
+            .collect()
     }
 }

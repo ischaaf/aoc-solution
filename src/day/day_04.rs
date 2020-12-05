@@ -1,5 +1,5 @@
-use regex::Regex;
 use crate::day::Day;
+use regex::Regex;
 use std::collections::HashMap;
 
 const REQUIRED: [&'static str; 7] = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
@@ -51,11 +51,12 @@ fn is_valid(key: &str, val: Option<&String>) -> bool {
     }
 }
 
-
 pub struct DaySln {}
 
 impl Day for DaySln {
-    fn day(&self) -> u32 { 4 }
+    fn day(&self) -> u32 {
+        4
+    }
     fn solve_part_1(&self) {
         let result = self.run_check(|pport| {
             REQUIRED

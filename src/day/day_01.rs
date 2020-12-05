@@ -4,7 +4,9 @@ use std::collections::HashSet;
 pub struct DaySln {}
 
 impl Day for DaySln {
-    fn day(&self) -> u32 { 1 }
+    fn day(&self) -> u32 {
+        1
+    }
 
     fn solve_part_1(&self) {
         let lines = self.get_input_ints();

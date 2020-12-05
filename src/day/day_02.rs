@@ -20,10 +20,12 @@ impl<'a> From<Captures<'a>> for PWPolicy {
     }
 }
 
-pub struct DaySln{}
+pub struct DaySln {}
 
 impl Day for DaySln {
-    fn day(&self) -> u32 { 2 }
+    fn day(&self) -> u32 {
+        2
+    }
 
     fn solve_part_1(&self) {
         let count = self.valid_count(|pwp| {

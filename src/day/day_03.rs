@@ -14,7 +14,9 @@ fn count_trees(forest: &Forest, over: usize, down: usize) -> u32 {
 pub struct DaySln {}
 
 impl Day for DaySln {
-    fn day(&self) -> u32 { 3 }
+    fn day(&self) -> u32 {
+        3
+    }
     fn solve_part_1(&self) {
         let forest = self.build_input();
         let trees = count_trees(&forest, 3, 1);

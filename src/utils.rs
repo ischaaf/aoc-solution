@@ -7,3 +7,4 @@ pub fn read_lines(filename: impl AsRef<Path>) -> Box<dyn Iterator<Item = String>
     let buf = BufReader::new(file);
     Box::new(buf.lines().map(|l| l.expect("unable to parse line")))
 }
+

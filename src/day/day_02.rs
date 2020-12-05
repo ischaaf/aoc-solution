@@ -1,4 +1,5 @@
 use crate::utils;
+use crate::day::Day;
 use regex::{Captures, Regex};
 
 #[derive(Debug)]
@@ -44,18 +45,23 @@ impl<'a> From<Captures<'a>> for PWPolicy {
         }))
 }
 
-pub fn solve_part_1() {
-    let count = get_input()
-        .map(|pwp| pwp.valid_part_1())
-        .filter(|v| *v)
-        .count();
-    println!("Found: {} valid", count);
-}
+pub struct DaySln{}
 
-pub fn solve_part_2() {
-    let count = get_input()
-        .map(|pwp| pwp.valid_part_2())
-        .filter(|v| *v)
-        .count();
-    println!("Found: {} valid", count);
+impl Day for DaySln {
+    fn day(&self) -> u32 { 2 }
+    fn solve_part_1(&self) {
+        let count = get_input()
+            .map(|pwp| pwp.valid_part_1())
+            .filter(|v| *v)
+            .count();
+        println!("Found: {} valid", count);
+    }
+
+    fn solve_part_2(&self) {
+        let count = get_input()
+            .map(|pwp| pwp.valid_part_2())
+            .filter(|v| *v)
+            .count();
+        println!("Found: {} valid", count);
+    }
 }

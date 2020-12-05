@@ -1,5 +1,6 @@
 use crate::utils;
 use regex::Regex;
+use crate::day::Day;
 use std::collections::HashMap;
 
 const REQUIRED: [&'static str; 7] = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
@@ -82,22 +83,27 @@ fn run_check<F: FnMut(&HashMap<String, String>) -> bool>(validate: F) -> usize {
         .count()
 }
 
-pub fn solve_part_1() {
-    let result = run_check(|pport| {
-        REQUIRED
-            .iter()
-            .map(|key| pport.contains_key(&key.to_string()))
-            .all(|v| v)
-    });
-    println!("Found {} valid passports", result);
-}
+pub struct DaySln {}
 
-pub fn solve_part_2() {
-    let result: usize = run_check(|pport| {
-        REQUIRED
-            .iter()
-            .map(|key| is_valid(key, pport.get(&key.to_string())))
-            .all(|v| v)
-    });
-    println!("Found {} valid passports", result);
+impl Day for DaySln {
+    fn day(&self) -> u32 { 4 }
+    fn solve_part_1(&self) {
+        let result = run_check(|pport| {
+            REQUIRED
+                .iter()
+                .map(|key| pport.contains_key(&key.to_string()))
+                .all(|v| v)
+        });
+        println!("Found {} valid passports", result);
+    }
+
+    fn solve_part_2(&self) {
+        let result: usize = run_check(|pport| {
+            REQUIRED
+                .iter()
+                .map(|key| is_valid(key, pport.get(&key.to_string())))
+                .all(|v| v)
+        });
+        println!("Found {} valid passports", result);
+    }
 }

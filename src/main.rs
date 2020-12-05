@@ -2,30 +2,40 @@ extern crate regex;
 #[macro_use]
 extern crate lazy_static;
 
+extern crate clap;
+
+use clap::{Arg, App};
+
 mod utils;
-mod day_1;
-mod day_2;
-mod day_3;
-mod day_4;
+mod day;
+
+use day::Part;
+
+
 
 fn main() {
-    println!(">>> Day 1 Part 1");
-    day_1::solve_part_1();
-    println!(">>> Day 1 Part 2");
-    day_1::solve_part_2();
 
-    println!(">>> Day 2 Part 1");
-    day_2::solve_part_1();
-    println!(">>> Day 2 Part 2");
-    day_2::solve_part_2();
-
-    println!(">>> Day 3 Part 1");
-    day_3::solve_part_1();
-    println!(">>> Day 3 Part 2");
-    day_3::solve_part_2();
-
-    println!(">>> Day 4 Part 1");
-    day_4::solve_part_1();
-    println!(">>> Day 4 Part 2");
-    day_4::solve_part_2();
+    let matches = App::new("Advent of Code Solution")
+        .version("1.0")
+        .author("Isaac S. <zeekus99@gmail.com>")
+        .arg(Arg::with_name("day")
+            .short("d")
+            .long("day")
+            .takes_value(true)
+            .required(true)
+        )
+        .arg(Arg::with_name("part")
+            .short("p")
+            .long("part")
+            .takes_value(true)
+        )
+        .get_matches();
+    let day = matches.value_of("day").unwrap().parse::<u32>().unwrap();
+    let part = match matches.value_of("part") {
+        Some("1") => Part::ONE,
+        Some("2") => Part::TWO,
+        Some("both") | None => Part::BOTH,
+        _ => panic!("Unknown part"),
+    };
+    day::solve(day, part);
 }

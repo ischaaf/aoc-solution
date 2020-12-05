@@ -1,4 +1,3 @@
-use crate::utils;
 use regex::Regex;
 use crate::day::Day;
 use std::collections::HashMap;
@@ -52,43 +51,13 @@ fn is_valid(key: &str, val: Option<&String>) -> bool {
     }
 }
 
-fn run_check<F: FnMut(&HashMap<String, String>) -> bool>(validate: F) -> usize {
-    utils::read_lines("data/day_4/input.txt")
-        .map(|l| {
-            l.split_whitespace()
-                .map(|e| {
-                    let mut items = e.split(":");
-                    (
-                        items.next().unwrap().to_string(),
-                        items.next().unwrap().to_string(),
-                    )
-                })
-                .collect::<Vec<(String, String)>>()
-        })
-        .fold(vec![HashMap::new()], |mut acc, eles| {
-            if eles.len() == 0 {
-                acc.push(HashMap::new());
-            } else {
-                let len = acc.len();
-                let map = &mut acc[len - 1];
-                for (key, val) in eles {
-                    map.insert(key, val);
-                }
-            }
-            acc
-        })
-        .iter()
-        .map(validate)
-        .filter(|v| *v)
-        .count()
-}
 
 pub struct DaySln {}
 
 impl Day for DaySln {
     fn day(&self) -> u32 { 4 }
     fn solve_part_1(&self) {
-        let result = run_check(|pport| {
+        let result = self.run_check(|pport| {
             REQUIRED
                 .iter()
                 .map(|key| pport.contains_key(&key.to_string()))
@@ -98,12 +67,46 @@ impl Day for DaySln {
     }
 
     fn solve_part_2(&self) {
-        let result: usize = run_check(|pport| {
+        let result: usize = self.run_check(|pport| {
             REQUIRED
                 .iter()
                 .map(|key| is_valid(key, pport.get(&key.to_string())))
                 .all(|v| v)
         });
         println!("Found {} valid passports", result);
+    }
+}
+
+impl DaySln {
+    fn run_check<F: FnMut(&HashMap<String, String>) -> bool>(&self, validate: F) -> usize {
+        self.daily_input()
+            .lines()
+            .map(|l| {
+                l.split_whitespace()
+                    .map(|e| {
+                        let mut items = e.split(":");
+                        (
+                            items.next().unwrap().to_string(),
+                            items.next().unwrap().to_string(),
+                        )
+                    })
+                    .collect::<Vec<(String, String)>>()
+            })
+            .fold(vec![HashMap::new()], |mut acc, eles| {
+                if eles.len() == 0 {
+                    acc.push(HashMap::new());
+                } else {
+                    let len = acc.len();
+                    let map = &mut acc[len - 1];
+                    for (key, val) in eles {
+                        map.insert(key, val);
+                    }
+                }
+                acc
+            })
+            .iter()
+            .map(validate)
+            .filter(|v| *v)
+            .count()
     }
 }

@@ -1,12 +1,5 @@
-use crate::utils;
 use crate::day::Day;
 use std::collections::HashSet;
-
-fn get_input() -> Vec<i32> {
-    utils::read_lines("data/day_1/input.txt")
-        .map(|e| e.parse::<i32>().unwrap())
-        .collect()
-}
 
 pub struct DaySln {}
 
@@ -14,7 +7,7 @@ impl Day for DaySln {
     fn day(&self) -> u32 { 1 }
 
     fn solve_part_1(&self) {
-        let lines = get_input();
+        let lines = self.get_input_ints();
         let mut seen: HashSet<i32> = HashSet::new();
         for num in lines {
             let comp = 2020 - num;
@@ -28,7 +21,7 @@ impl Day for DaySln {
     }
 
     fn solve_part_2(&self) {
-        let lines = get_input();
+        let lines = self.get_input_ints();
         let mut seen: HashSet<i32> = HashSet::new();
         for num_1 in &lines {
             for num_2 in &lines {
@@ -45,3 +38,11 @@ impl Day for DaySln {
     }
 }
 
+impl DaySln {
+    fn get_input_ints(&self) -> Vec<i32> {
+        self.daily_input()
+            .lines()
+            .map(|e| e.parse::<i32>().unwrap())
+            .collect()
+    }
+}

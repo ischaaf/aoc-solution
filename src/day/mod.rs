@@ -1,3 +1,5 @@
+use aocf::Aoc;
+
 mod day_01;
 mod day_02;
 mod day_03;
@@ -31,7 +33,15 @@ pub enum Part {
 }
 
 pub trait Day {
+
     fn day(&self) -> u32;
+
+    fn daily_input(&self) -> String {
+        let day = self.day();
+        let mut aoc = Aoc::new().year(Some(2020)).day(Some(day)).init().unwrap();
+        let input = aoc.get_input(false).unwrap();
+        input
+    }
 
     fn solve_part_1(&self) {
         println!("Day {} Part 1 not implemented", self.day());

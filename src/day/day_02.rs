@@ -1,4 +1,3 @@
-use crate::utils;
 use crate::day::Day;
 use regex::{Captures, Regex};
 
@@ -8,18 +7,6 @@ struct PWPolicy {
     min: usize,
     max: usize,
     pw: String,
-}
-
-impl PWPolicy {
-    fn valid_part_1(&self) -> bool {
-        let count = self.pw.chars().filter(|c| *c == self.letter).count();
-        count >= self.min && count <= self.max
-    }
-    fn valid_part_2(&self) -> bool {
-        let min_char = self.pw.chars().nth(self.min - 1);
-        let max_char = self.pw.chars().nth(self.max - 1);
-        (min_char == Some(self.letter)) ^ (max_char == Some(self.letter))
-    }
 }
 
 impl<'a> From<Captures<'a>> for PWPolicy {
@@ -33,35 +20,43 @@ impl<'a> From<Captures<'a>> for PWPolicy {
     }
 }
 
- fn get_input() -> Box<dyn Iterator<Item=PWPolicy>> {
-    let re = Regex::new(r"([0-9]+)\-([0-9]+) (.): (.+)").unwrap();
-    Box::new(utils::read_lines("data/day_2/input.txt")
-        .map(move |l| {
-            let cap = re
-                .captures_iter(l.as_str())
-                .nth(0)
-                .expect(format!("Failed to match: {}", l).as_str());
-            cap.into()
-        }))
-}
-
 pub struct DaySln{}
 
 impl Day for DaySln {
     fn day(&self) -> u32 { 2 }
+
     fn solve_part_1(&self) {
-        let count = get_input()
-            .map(|pwp| pwp.valid_part_1())
-            .filter(|v| *v)
-            .count();
+        let count = self.valid_count(|pwp| {
+            let count = pwp.pw.chars().filter(|c| *c == pwp.letter).count();
+            count >= pwp.min && count <= pwp.max
+        });
         println!("Found: {} valid", count);
     }
 
     fn solve_part_2(&self) {
-        let count = get_input()
-            .map(|pwp| pwp.valid_part_2())
-            .filter(|v| *v)
-            .count();
+        let count = self.valid_count(|pwp| {
+            let min_char = pwp.pw.chars().nth(pwp.min - 1);
+            let max_char = pwp.pw.chars().nth(pwp.max - 1);
+            (min_char == Some(pwp.letter)) ^ (max_char == Some(pwp.letter))
+        });
         println!("Found: {} valid", count);
+    }
+}
+
+impl DaySln {
+    fn valid_count(&self, validate_fn: fn(PWPolicy) -> bool) -> usize {
+        let re = Regex::new(r"([0-9]+)\-([0-9]+) (.): (.+)").unwrap();
+        self.daily_input()
+            .lines()
+            .map(move |l| {
+                let cap = re
+                    .captures_iter(l)
+                    .nth(0)
+                    .expect(format!("Failed to match: {}", l).as_str());
+                cap.into()
+            })
+            .map(|pwp| validate_fn(pwp))
+            .filter(|v| *v)
+            .count()
     }
 }

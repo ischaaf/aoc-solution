@@ -14,20 +14,13 @@ impl Day for DaySln {
 
     fn solve_part_2(&self) {
         let mut seats = self.seats();
-        seats.sort();
-        let mut prev = seats[0];
-        let mut gap = None;
-        for s in seats[1..].iter() {
-            if prev + 2 == *s {
-                println!("Found gap: {} and {}", prev, s);
-                gap = Some(prev + 1);
-            }
-            prev = *s;
-        }
-        match gap {
-            Some(val) => println!("Found Gap: {}", val),
-            None => println!("Did not find a gap"),
-        }
+        seats.sort_unstable();
+        let gap = seats
+            .windows(2)
+            .filter(|p| p[0] + 2 == p[1])
+            .next()
+            .unwrap()[0];
+        println!("Found Gap: {}", gap);
     }
 }
 

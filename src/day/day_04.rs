@@ -1,4 +1,4 @@
-use crate::day::{Day,Solution};
+use crate::day::{Day, Solution};
 use regex::Regex;
 use std::collections::HashMap;
 
@@ -77,33 +77,17 @@ impl Day for DaySln {
 }
 
 impl DaySln {
-    fn run_check<F: FnMut(&HashMap<String, String>) -> bool>(&self, validate: F) -> i32 {
+    fn run_check<F: FnMut(HashMap<String, String>) -> bool>(&self, validate: F) -> i32 {
         self.daily_input()
-            .lines()
+            .split("\n\n")
             .map(|l| {
                 l.split_whitespace()
                     .map(|e| {
-                        let mut items = e.split(":");
-                        (
-                            items.next().unwrap().to_string(),
-                            items.next().unwrap().to_string(),
-                        )
+                        let mut items = e.split(":").map(|v| v.to_string());
+                        (items.next().unwrap(), items.next().unwrap())
                     })
-                    .collect::<Vec<(String, String)>>()
+                    .collect::<HashMap<String, String>>()
             })
-            .fold(vec![HashMap::new()], |mut acc, eles| {
-                if eles.len() == 0 {
-                    acc.push(HashMap::new());
-                } else {
-                    let len = acc.len();
-                    let map = &mut acc[len - 1];
-                    for (key, val) in eles {
-                        map.insert(key, val);
-                    }
-                }
-                acc
-            })
-            .iter()
             .map(validate)
             .filter(|v| *v)
             .count() as i32
